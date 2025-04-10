@@ -56,6 +56,14 @@ def test_kernel_repr(KernelClass):
     assert repr(kernel) == f"{KernelClass.__name__}()"
 
 
+@pytest.mark.parametrize("KernelClass", kernel_classes)
+def test_kernel_eval_gradient_raises_error(KernelClass):
+    """Test that eval_gradient=True raises an error for all kernel classes."""
+    kernel = KernelClass()
+    with pytest.raises(ValueError, match=f"{KernelClass.__name__} kernel does not support gradient evaluation"):
+        kernel(X1, eval_gradient=True)
+
+
 # --- MinMaxTanimoto Specific Tests ---
 
 
