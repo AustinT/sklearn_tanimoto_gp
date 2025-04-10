@@ -1,29 +1,35 @@
-# Python Template
+# Sklearn Tanimoto GP Kernels
 
-**Project description here**
+This package provides Tanimoto similarity kernels compatible with scikit-learn's Gaussian Process module (`sklearn.gaussian_process.kernels.Kernel`).
 
-This is a template project so I don't need to keep setting up pre-commit.
+Intended usage:
+
+```python
+import numpy as np
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn_tanimoto_gp import Tanimoto
+
+# Example Data
+X_train = np.random.rand(10, 5) * 10 # Example non-negative data
+y_train = np.sum(X_train[:, :2], axis=1) + np.random.randn(10) * 0.1
+X_test = np.random.rand(5, 5) * 10
+
+# Using MinMaxTanimoto (or Tanimoto)
+gp = GaussianProcessRegressor(kernel=Tanimoto(), alpha=1e-5, normalize_y=True)
+gp.fit(X_train, y_train)
+y_pred, sigma = gp.predict(X_test, return_std=True)
+```
+
+## Installation
+
+```bash
+pip install git+https://github.com/AustinT/sklearn_tanimoto_gp.git
+```
 
 ## Development
 
-### Installation
+PRs are welcome. Please use pre-commit and run tests.
 
-**Installation instructions here**
-
-### Formatting
-
-Use pre-commit to enforce formatting, large file checks, etc.
-
-If not already installed in your environment, run:
-
-```bash
-conda install pre-commit
-```
-
-To install the precommit hooks:
-
-```bash
-pre-commit install
-```
-
-Now a series of useful checks will be run before any commit.
+NOTE: LLMs were used in the initial development of this package.
+I have checked the outputs but cannot guarantee that there are no
+mistakes.
