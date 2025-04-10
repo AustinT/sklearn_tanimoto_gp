@@ -2,6 +2,7 @@
 import numpy as np
 import pytest
 from numpy.testing import assert_allclose
+from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import Kernel  # For comparison/sanity check
 
 from sklearn_tanimoto_gp import (
@@ -200,3 +201,30 @@ def test_tanimoto_aliases():
     """Check that Tanimoto is an alias for MinMaxTanimoto and TanimotoBinary is an alias for DotProductTanimoto."""
     assert Tanimoto is MinMaxTanimoto
     assert TanimotoBinary is DotProductTanimoto
+
+
+def test_gaussian_process_with_tanimoto():
+    """Test that a Gaussian Process with Tanimoto kernel can be instantiated, fit, and predict."""
+
+    # Generate example data similar to README.md
+    np.random.seed(42)  # For reproducibility
+    X_train = np.random.rand(10, 5) * 10  # Example non-negative data
+    y_train = np.sum(X_train[:, :2], axis=1) + np.random.randn(10) * 0.1
+    X_test = np.random.rand(5, 5) * 10
+
+    # Create and fit GP with Tanimoto kernel
+    gp = GaussianProcessRegressor(kernel=Tanimoto(), alpha=1e-5, normalize_y=True)
+    gp.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred, sigma = gp.predict(X_test, return_std=True)
+
+    # Basic shape checks
+    assert y_pred.shape == (5,)  # Should predict for 5 test points
+    assert sigma.shape == (5,)  # Should have uncertainty for each prediction
+
+    # Check that predictions are not all the same
+    assert not np.allclose(y_pred, y_pred[0])
+
+    # Check that uncertainties are positive
+    assert np.all(sigma > 0)
