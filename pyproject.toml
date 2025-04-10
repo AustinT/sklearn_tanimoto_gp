@@ -1,10 +1,64 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sklearn_tanimoto_gp"
+version = "0.1.0"
+description = "Tanimoto kernels for scikit-learn Gaussian Processes"
+readme = "README.md"
+authors = [
+  { name="Austin Tripp"},
+]
+license = { file="LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=1.20",
+    "scikit-learn>=1.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/AustinT/sklearn_tanimoto_gp" # CHANGE THIS
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit>=2.15",
+    "pytest>=6.0",
+    "pytest-cov", # Optional: for coverage reports
+]
+
+[tool.setuptools.packages.find]
+where = ["."] # find packages in the current directory
+include = ["sklearn_tanimoto_gp*"]  # Include the package
+exclude = ["tests*"] # Exclude tests from the final wheel
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --cov=sklearn_tanimoto_gp --cov-report=term-missing"
+testpaths = [
+    "tests",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning", # Ignore warnings if necessary
+]
+
 [tool.black]
 line-length = 120
 include = '\.pyi?$'
-
-[tool.mypy]
-python_version = 3.9  # pin modern python version
-ignore_missing_imports = true
 
 [tool.ruff]
 line-length = 120
