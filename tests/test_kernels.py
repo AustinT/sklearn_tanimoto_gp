@@ -196,13 +196,7 @@ def test_dotprod_tanimoto_values_kXY():
     assert_allclose(K, expected_K)
 
 
-def test_tanimoto_alias():
-    """Check that Tanimoto is an alias for MinMaxTanimoto."""
+def test_tanimoto_aliases():
+    """Check that Tanimoto is an alias for MinMaxTanimoto and TanimotoBinary is an alias for DotProductTanimoto."""
     assert Tanimoto is MinMaxTanimoto
-    kernel_alias = Tanimoto()
-    kernel_direct = MinMaxTanimoto()
-    assert isinstance(kernel_alias, MinMaxTanimoto)
-    assert type(kernel_alias) is type(kernel_direct)
-    # Check if they produce the same results
-    assert_allclose(kernel_alias(X1), kernel_direct(X1))
-    assert_allclose(kernel_alias(X1, Y1), kernel_direct(X1, Y1))
+    assert TanimotoBinary is DotProductTanimoto
